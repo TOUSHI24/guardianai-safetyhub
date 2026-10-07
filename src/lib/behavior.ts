@@ -17,7 +17,8 @@ export function buildBaseline(input: Sample[]): Baseline {
   const hours = Array.from({ length: 24 }, () => 0), activities: Record<string, number> = {};
   const locations: Baseline['locations'] = [];
   for (const s of samples) {
-    hours[new Date(s.recorded_at).getUTCHours()]++;
+    const hour = new Date(s.recorded_at).getUTCHours();
+    hours[hour] = (hours[hour] ?? 0) + 1;
     activities[s.activity] = (activities[s.activity] ?? 0) + 1;
     if (s.latitude != null && s.longitude != null && (s.accuracy ?? 0) <= 100) {
       const p = { latitude: s.latitude, longitude: s.longitude };

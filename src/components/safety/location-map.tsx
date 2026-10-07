@@ -12,7 +12,7 @@ export default function LocationMap({ points }: { points: { latitude: number; lo
       const m = L.map(ref.current).setView([latest.latitude, latest.longitude], 15); map.current = m;
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors', maxZoom: 19 }).addTo(m);
       L.circleMarker([latest.latitude, latest.longitude], { radius: 9, className: 'location-marker' }).addTo(m).bindPopup('Current location');
-      if (points.length > 1) L.polyline(points.map(p => [p.latitude, p.longitude]), { className: 'location-trail', weight: 3 }).addTo(m);
+      if (points.length > 1) L.polyline(points.map(p => [p.latitude, p.longitude] as [number, number]), { className: 'location-trail', weight: 3 }).addTo(m);
       m.invalidateSize();
     });
     return () => { cancelled = true; map.current?.remove(); map.current = null; };
