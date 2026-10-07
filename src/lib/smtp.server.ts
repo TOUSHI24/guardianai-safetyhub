@@ -13,7 +13,8 @@ function reader(sock: Sock) {
       const lines = buf.split("\r\n");
       let end = -1;
       for (let i = 0; i < lines.length - 1; i++) {
-        if (/^\d{3} /.test(lines[i])) { end = i; break; }
+        if (lines[i] === undefined) continue;
+        if (/^\d{3} /.test(lines[i] ?? "")) { end = i; break; }
       }
       if (end === -1) return;
       const reply = lines.slice(0, end + 1).join("\n");
