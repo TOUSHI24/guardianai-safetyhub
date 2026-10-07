@@ -69,7 +69,7 @@ function Dashboard() {
   const [result, setResult] = useState<(SosResult & { located: boolean }) | null>(null);
   const [editing, setEditing] = useState<Partial<Contact> | null>(null);
 
-  const name = profile.data?.full_name || (user.user_metadata?.full_name as string) || user.email;
+  const name = profile.data?.full_name || (user.user_metadata?.['full_name'] as string) || user.email;
 
   async function pressSos() {
     if (phase !== "idle") return;
@@ -95,11 +95,11 @@ function Dashboard() {
     if (!editing) return;
     const n = (editing.name ?? "").trim();
     const em = (editing.email ?? "").trim();
-    if (!n || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) return toast.error("Enter a name and a valid email");
+    if (!n || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { toast.error("Enter a name and a valid email"); return; }
     const { error } = editing.id
       ? await supabase.from("trusted_contacts").update({ name: n, email: em }).eq("id", editing.id)
       : await supabase.from("trusted_contacts").insert({ name: n, email: em, user_id: user.id });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setEditing(null);
     qc.invalidateQueries({ queryKey: ["contacts"] });
   }
