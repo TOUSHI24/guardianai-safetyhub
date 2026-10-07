@@ -16,6 +16,8 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Sign in to GuardianAI to manage trusted contacts and SOS alerts." },
       { property: "og:title", content: "Log in or register — GuardianAI" },
       { property: "og:description", content: "Sign in to GuardianAI to manage trusted contacts and SOS alerts." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AuthPage,
