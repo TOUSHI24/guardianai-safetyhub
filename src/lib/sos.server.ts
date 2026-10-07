@@ -55,7 +55,7 @@ ${maps ? `<p><a href="${maps}" style="background:#c8102e;color:#fff;padding:10px
 
     let sent = 0;
     const errors: string[] = [];
-    if (!cfg.host || !cfg.user || !cfg.pass || !cfg.from) {
+    if (!apiKey) {
       errors.push("Email settings are missing on the server.");
     } else {
       for (const c of recipients) {
