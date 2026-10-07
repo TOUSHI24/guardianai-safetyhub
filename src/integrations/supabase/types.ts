@@ -14,7 +14,93 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      emergency_events: {
+        Row: {
+          created_at: string
+          email_error: string | null
+          email_status: string
+          emails_failed: number
+          emails_sent: number
+          id: string
+          latitude: number | null
+          longitude: number | null
+          message: string
+          risk: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_error?: string | null
+          email_status?: string
+          emails_failed?: number
+          emails_sent?: number
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          message: string
+          risk?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          email_error?: string | null
+          email_status?: string
+          emails_failed?: number
+          emails_sent?: number
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          message?: string
+          risk?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string
+          id: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      trusted_contacts: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string
+          notify: boolean
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          notify?: boolean
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          notify?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
