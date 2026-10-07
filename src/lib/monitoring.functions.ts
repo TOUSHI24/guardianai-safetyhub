@@ -47,8 +47,8 @@ export const respondToAlert = createServerFn({ method: 'POST' }).middleware([req
       if (linkError) throw new Error('Emergency saved, but alert status could not be linked.');
       return { status: 'emergency', emergency };
     } catch (e) {
-      // Release only if no emergency has been linked; a delivery failure is returned, not thrown.
-      await supabase.from('risk_alerts').update({ status: 'pending' }).eq('id', alert.id).is('emergency_event_id', null);
+      // Do not release a claimed escalation: SMTP may already have accepted emails.
+      // Keep the saved emergency visible instead of risking duplicate sends on retry.
       throw e;
     }
   });
