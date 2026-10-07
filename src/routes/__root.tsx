@@ -137,6 +137,9 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <SafetyProvider user={user}><Outlet /></SafetyProvider>
+      <footer className="border-t border-border/60 px-4 pb-28 pt-6 text-center text-xs text-muted-foreground md:pb-6">
+        Made by Toushi Nizami, Shashank Karma, Yash Gurjar, Sonam Gupta
+      </footer>
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );
