@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      behavior_baselines: {
+        Row: {
+          baseline: Json
+          sample_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          baseline?: Json
+          sample_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          baseline?: Json
+          sample_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      behavior_samples: {
+        Row: {
+          accepted: boolean
+          accuracy: number | null
+          activity: string
+          duration_seconds: number
+          id: string
+          latitude: number | null
+          longitude: number | null
+          recorded_at: string
+          speed: number
+          user_id: string
+        }
+        Insert: {
+          accepted?: boolean
+          accuracy?: number | null
+          activity: string
+          duration_seconds?: number
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          recorded_at?: string
+          speed?: number
+          user_id?: string
+        }
+        Update: {
+          accepted?: boolean
+          accuracy?: number | null
+          activity?: string
+          duration_seconds?: number
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          recorded_at?: string
+          speed?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       emergency_events: {
         Row: {
           created_at: string
@@ -25,8 +85,13 @@ export type Database = {
           latitude: number | null
           longitude: number | null
           message: string
+          reasons: Json
           risk: string
+          risk_score: number
+          status: string
+          trigger: string
           user_id: string
+          user_response: string | null
         }
         Insert: {
           created_at?: string
@@ -38,8 +103,13 @@ export type Database = {
           latitude?: number | null
           longitude?: number | null
           message: string
+          reasons?: Json
           risk?: string
+          risk_score?: number
+          status?: string
+          trigger?: string
           user_id?: string
+          user_response?: string | null
         }
         Update: {
           created_at?: string
@@ -51,8 +121,13 @@ export type Database = {
           latitude?: number | null
           longitude?: number | null
           message?: string
+          reasons?: Json
           risk?: string
+          risk_score?: number
+          status?: string
+          trigger?: string
           user_id?: string
+          user_response?: string | null
         }
         Relationships: []
       }
@@ -74,29 +149,104 @@ export type Database = {
         }
         Relationships: []
       }
+      risk_alerts: {
+        Row: {
+          confidence: number
+          created_at: string
+          deadline: string | null
+          emergency_event_id: string | null
+          id: string
+          latitude: number | null
+          level: string
+          longitude: number | null
+          reasons: Json
+          sample_id: string | null
+          score: number
+          status: string
+          user_id: string
+          user_response: string | null
+        }
+        Insert: {
+          confidence: number
+          created_at?: string
+          deadline?: string | null
+          emergency_event_id?: string | null
+          id?: string
+          latitude?: number | null
+          level: string
+          longitude?: number | null
+          reasons?: Json
+          sample_id?: string | null
+          score: number
+          status?: string
+          user_id?: string
+          user_response?: string | null
+        }
+        Update: {
+          confidence?: number
+          created_at?: string
+          deadline?: string | null
+          emergency_event_id?: string | null
+          id?: string
+          latitude?: number | null
+          level?: string
+          longitude?: number | null
+          reasons?: Json
+          sample_id?: string | null
+          score?: number
+          status?: string
+          user_id?: string
+          user_response?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "risk_alerts_emergency_event_id_fkey"
+            columns: ["emergency_event_id"]
+            isOneToOne: false
+            referencedRelation: "emergency_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "risk_alerts_sample_id_fkey"
+            columns: ["sample_id"]
+            isOneToOne: false
+            referencedRelation: "behavior_samples"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trusted_contacts: {
         Row: {
           created_at: string
           email: string
           id: string
+          is_primary: boolean
           name: string
           notify: boolean
+          phone: string
+          relationship: string
           user_id: string
         }
         Insert: {
           created_at?: string
           email: string
           id?: string
+          is_primary?: boolean
           name: string
           notify?: boolean
+          phone?: string
+          relationship?: string
           user_id?: string
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
+          is_primary?: boolean
           name?: string
           notify?: boolean
+          phone?: string
+          relationship?: string
           user_id?: string
         }
         Relationships: []
