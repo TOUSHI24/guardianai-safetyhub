@@ -3,7 +3,15 @@ import type { Database } from "@/integrations/supabase/types";
 const esc = (s: string) => s.replace(/[&<>"\']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "\'": "&#39;" })[c] ?? c);
 export async function dispatchSos(supabase: SupabaseClient<Database>, userId: string, data: { latitude: number | null; longitude: number | null; message: string; trigger?: string; risk_score?: number; risk?: string; reasons?: string[]; user_response?: string }) {
 
-    const { sendMail } = await import("./smtp.server");
+    const apiKey = process.env["BREVO_API_KEY"] ?? "";
+    const sendMail = async (_c: unknown, to: string, subject: string, text: string, html: string) => {
+      const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: { "api-key": apiKey, "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ sender: { name: "GuardianAI", email: "toushinizami@gmail.com" }, to: [{ email: to }], subject, htmlContent: html, textContent: text }),
+      });
+      if (!res.ok) throw new Error(`Brevo API ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    };
 
     const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", userId).maybeSingle();
     const name = profile?.full_name || "A GuardianAI user";
@@ -47,7 +55,7 @@ ${maps ? `<p><a href="${maps}" style="background:#c8102e;color:#fff;padding:10px
 
     let sent = 0;
     const errors: string[] = [];
-    if (!cfg.host || !cfg.user || !cfg.pass || !cfg.from) {
+    if (!apiKey) {
       errors.push("Email settings are missing on the server.");
     } else {
       for (const c of recipients) {
