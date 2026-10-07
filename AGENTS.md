@@ -10,3 +10,5 @@
 <!-- LOVABLE:END -->
 
 - SOS emails are sent from a server function via a hand-written SMTP client (src/lib/smtp.server.ts) using Brevo SMTP secrets — user required SMTP, not the Brevo HTTP API.
+- Behaviour scoring uses a shared deterministic pure module and authenticated server functions over owner-scoped stored samples; baseline learning excludes unresolved anomalous samples to avoid teaching unsafe activity as normal.
+- Live geolocation monitoring runs only while the page is open; demo state stays in memory and never sends email or writes real safety records.
