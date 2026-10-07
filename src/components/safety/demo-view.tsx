@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FlaskConical, Play, RotateCcw, ShieldCheck, Siren, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SafetyShell, RiskBadge } from './safety-shell';
+import { useSafety } from './safety-provider';
 import { buildBaseline, scoreBehavior, type Sample } from '@/lib/behavior';
 const steps = ['Normal Activity','Unusual Activity','High Risk','Safety Alert','No Response','Auto Escalation','Emergency','Resolution'];
 function demoAssessment(step: number) {
@@ -10,6 +11,8 @@ function demoAssessment(step: number) {
   return scoreBehavior(sample,buildBaseline(samples));
 }
 export function DemoView() {
+  const safety = useSafety();
+  useEffect(() => { safety.setMonitoring(false); }, [safety.setMonitoring]);
   const [step,setStep] = useState(-1), [remaining,setRemaining] = useState(30), [running,setRunning] = useState(false), [safe,setSafe] = useState(false);
   useEffect(() => { if (!running || step < 0 || step >= 7) return; const timer = setTimeout(() => { if (step === 3 && remaining > 1) setRemaining(v => v-1); else setStep(v => v+1); }, step === 3 ? 1000 : 2200); return () => clearTimeout(timer); },[running,step,remaining]);
   const risk = demoAssessment(Math.max(0,step));
